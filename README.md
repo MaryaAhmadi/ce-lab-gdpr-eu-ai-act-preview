@@ -1,21 +1,64 @@
 # Lab M8.07 - GDPR & EU AI Act Data Protection Preview
 
-**Repository:** [https://github.com/cloud-engineering-bootcamp/ce-lab-gdpr-eu-ai-act-preview](https://github.com/cloud-engineering-bootcamp/ce-lab-gdpr-eu-ai-act-preview)
+**Repository:** https://github.com/cloud-engineering-bootcamp/ce-lab-gdpr-eu-ai-act-preview.git
 
 **Activity Type:** Individual  
 **Estimated Time:** 60 minutes
 
-## Learning Objectives
+## Overview
+This project demonstrates the implementation of GDPR-compliant data protection mechanisms using AWS S3. It covers data residency in the EU, encryption, access control, lifecycle management, and the execution of a real "Right to Erasure" workflow (Article 17).
 
-- [ ] Implement GDPR right to access (data export)
-- [ ] Implement GDPR right to erasure (data deletion)
-- [ ] Configure data residency controls (EU-only)
-- [ ] Document compliance measures
+## Objectives
 
-## Prerequisites
+- Enforce EU data residency (eu-west-1)
+- Implement secure data storage with encryption (AES-256)
+- Prevent public access to sensitive data
+- Apply data classification using object tags
+- Configure automated data retention (30 days)
+- Execute GDPR Right to Access and Right to Erasure
+- Provide compliance evidence for auditing
 
-- [ ] AWS account with resources in US region
-- [ ] Completed Module 8 Lesson 7
+## Architecture
+
+- AWS S3 for secure object storage
+- AWS CLI for configuration and management
+- Object Tagging for GDPR classification
+- Lifecycle Policies for automated deletion
+- Versioning for audit and recovery
+
+## Implementation Steps
+
+1. EU Data Residency
+- Created S3 bucket in eu-west-1 (Ireland)
+- Verified region to ensure GDPR compliance
+
+2. Security Controls
+- Enabled S3 Block Public Access (all 4 settings)
+- Enforced server-side encryption (AES-256)
+- Applied bucket policy to deny unencrypted uploads
+
+3. Data Upload & Classification
+- Uploaded simulated personal data (personal-data.csv)
+- Applied GDPR tags:
+- DataClassification=PersonalData
+- GDPRArticle=4
+- LegalBasis=Consent
+- RetentionDays=30
+
+4. Lifecycle Management
+- Configured lifecycle rule:
+  - Delete personal data after 30 days
+  - Remove old versions after 7 days
+
+5. Right to Access (Article 15)
+- Exported user data (U003 – Clara Rossi)
+- Stored in clara-rossi-export.csv
+
+6. Right to Erasure (Article 17)
+- Removed user U003 from dataset
+- Uploaded cleaned dataset
+- Deleted previous S3 object versions
+- Verified complete removal
 
 ## Task
 
@@ -149,4 +192,16 @@ Create `gdpr-compliance-doc.md`:
 - [ ] EU-only SCP or policy configured
 - [ ] GDPR compliance documented
 
-**Good luck! 🔒**
+## Project Files
+- personal-data.csv → Original dataset
+- personal-data-cleaned.csv → Dataset after deletion
+- clara-rossi-export.csv → Exported user data
+- gdpr-evidence.md → Compliance evidence document
+- screenshots/ → Supporting proof
+
+## Key Learnings
+- GDPR compliance requires both technical controls and process validation
+- Encryption must be enforced, not optional
+- Data deletion must include all versions
+- Data residency is critical for EU compliance
+- Lifecycle policies help enforce retention automatically
